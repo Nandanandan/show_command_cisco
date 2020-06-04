@@ -1,13 +1,20 @@
 ---
-- name: test cisco version
+- name: IOS show command
   hosts: switches,asr
   gather_facts: no
+  vars:
+      output_dir: command_output
   tasks:
-     - name: get cisco version
+     - name: Execute show command
        ios_command:
            commands: "show run | i domain|name-server"
        register: version
+     - name: create output directory
+       file:
+         path: "{{ playbook_dir }}/../{{ output_dir }}"
+         state: directory
+         mode: '0755'
      - copy:
          content: "{{ version.stdout }}"
-         dest: "{{ playbook_dir }}/../output/{{ inventory_hostname }}"
+         dest: "{{ playbook_dir }}/../{{ output_dir }}/{{ inventory_hostname }}"
        delegate_to: localhost
