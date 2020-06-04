@@ -1,14 +1,13 @@
 ---
 - name: test cisco version
-  hosts: all
+  hosts: switches,asr
   gather_facts: no
   tasks:
      - name: get cisco version
        ios_command:
-           commands: show version
+           commands: "show run | i domain|name-server"
        register: version
      - copy:
          content: "{{ version.stdout }}"
          dest: "{{ playbook_dir }}/../output/{{ inventory_hostname }}"
        delegate_to: localhost
-      
