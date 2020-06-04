@@ -10,7 +10,7 @@
          path: "{{ playbook_dir }}/../{{ output_dir }}"
          state: directory
          mode: '0755'
----
+
 - name: IOS show command
   hosts: switches,asr
   gather_facts: no
