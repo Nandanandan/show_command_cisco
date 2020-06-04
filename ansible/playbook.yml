@@ -5,16 +5,17 @@
   vars:
       output_dir: command_output
   tasks:
-     - name: Execute show command
+     - name: "Execute show command on {{ inventory_hostname }}"
        ios_command:
            commands: "show run | i domain|name-server"
        register: version
-     - name: create output directory
+     - name: "create directory {{ output_dir }}"
        file:
          path: "{{ playbook_dir }}/../{{ output_dir }}"
          state: directory
          mode: '0755'
-     - copy:
+     - name: "save output with device hostname in {{ output_dir }}"
+       copy:
          content: "{{ version.stdout }}"
          dest: "{{ playbook_dir }}/../{{ output_dir }}/{{ inventory_hostname }}"
        delegate_to: localhost
